@@ -1,8 +1,9 @@
 # ec_tpfan
 
-This is forked from https://github.com/Soberia/EmbeddedController
+This is forked from [EmbeddedController](https://github.com/Soberia/EmbeddedController)
 
-All interfaces are consistent with no change , just parameterized special methods for read / write EC's registers.
+All interfaces are consistent with no change , just build console app that have parameterized special methods for read / write EC's registers.
+Especially, it has ability to control Fan RPM special for Thinkpad E16.
 
 ## **📋 Compile / Build in Visual Studio 2019**
 You need to compile your app with `c++17` flag (this is completed already in app property settings)
@@ -50,5 +51,28 @@ Lao Wang wants to restore EC automatic fan adjustment, execute the command:
 ```
 ec.exe -w 0x2f 0x80
 ```
+
+# Theory 
+If you want to manually control the Thinkapd E16 fan speed, you need to prepare:
+
+Laptop EC monitoring software [RWEverything](http://rweverything.com/download/)
+Before installation, please turn off "Core Isolotion > Memory integrity" in Windows 10/11, run the following command with administrator privileges to allow driver signature testing, and then restart the machine.
+```
+bcdedit -set TESTSIGNING ON
+```
+**Note:** If BitLock is turned on, after restarting, it will ask for the key to enter! (So, it is best to back up the BitLock key to a USB flash drive first)
+
+After RWEverything is installed and started, click the EC button on the toolbar to start displaying and monitoring the current 256 register values of EC, and the values of these registers can be modified manually (note that modifications are risky and may cause hardware damage!).
+Note that the default is to refresh every 1.3 seconds (click the refresh button on the upper right to change the monitoring interval).
+
+Now you can do some stress tests (such as cpu-z) to gradually increase the notebook fan speed, and you can observe which registers have changed. For example, the fan speed value is in registers 0x84 and 0x85 (represented by 2 bytes).
+Unfortunately, although this value can be changed, it is quickly automatically updated by the EC firmware program. It is also possible that the BIOS/UEFI firmware program takes over the automatic update.
+
+So is there any way to manually control the fan speed? Although, RWEverything gave the changed registers, and I took the risk to change them, but there was no result.
+Fortunately there was no hardware damage.
+
+After reading a short article written by a laptop fan program developer (How to analyze the laptop's DSDT table) [Analyze your notebook's DSDT](https://github.com/hirschmann/nbfc/wiki/Analyze-your-notebook%27s-DSDT),
+I roughly understand the principle of how the operating system communicates with the BIOS/UEFI firmware program. This article is very enlightening. The analysis method is similar.
+
 
 # **Disclaimer: I am not responsible for any hardware damage caused by modifying the EC register with this program!**
