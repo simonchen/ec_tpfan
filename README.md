@@ -21,7 +21,7 @@ Without any parameters, you will be prompted for usage:
 
 Please forgive me for my poor English and coding skills. I am too lazy to change it at the moment.
 ```
-Usage: [-dump] [-rpm] [-r {port}] [-w {port} {value}]
+Usage: ec.exe [-dump] [-rpm] [-r {port}] [-w {port} {value}]
 
 -dump displays the current values (hexadecimal) of all operable registers of EC (range 0x00 to 0xFF)
 -rpm displays the current fan speed (only for Thinkpad E16 Gen 1 Intel model, not sure about other models, the main principle is to read the register 0x84, 0x85 values)
